@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DateSearchDLL;
 using NewEventLogDLL;
+using NewEmployeeDLL;
 
 namespace AutoEmailFileReport
 {
@@ -27,11 +28,13 @@ namespace AutoEmailFileReport
         EventLogClass TheEventLogClass = new EventLogClass();
         WPFMessagesClass TheMessagesClass = new WPFMessagesClass();
         SendEmailClass TheSendEmailClass = new SendEmailClass();
+        EmployeeClass TheEmployeeClass = new EmployeeClass();
 
         //setting up the data sets
         FindActiveServerLogSearchTermsDataSet TheFindActiveServerLogSearchTermsDataSet = new FindActiveServerLogSearchTermsDataSet();
         FindServerEventLogForReportsByItemDataSet TheFindServerEventLogForReportsByItemDataSet = new FindServerEventLogForReportsByItemDataSet();
         FindServerEventLogForReportsByUserDataSet TheFindServerEventLogForReportsByUserDataSet = new FindServerEventLogForReportsByUserDataSet();
+        FindRandomEmployeeDataSet TheFindRandomEmployeeDataSet = new FindRandomEmployeeDataSet();
 
         public MainWindow()
         {
@@ -46,6 +49,7 @@ namespace AutoEmailFileReport
             string strSearchTerm;
             DateTime datStartDate = DateTime.Now;
             DateTime datEndDate = DateTime.Now;
+            string strLastName;
 
             try
             {
@@ -79,6 +83,27 @@ namespace AutoEmailFileReport
                             }
                         }
                         else if(intRecordsReturned > 0)
+                        {
+                            SendUserReport();
+                        }
+                    }
+                }
+
+                TheFindRandomEmployeeDataSet = TheEmployeeClass.FindRandomEmployees();
+
+                intNumberOfRecords = TheFindRandomEmployeeDataSet.FindRandomEmployees.Rows.Count;
+
+                if(intNumberOfRecords > 0)
+                {
+                    for(intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strLastName = TheFindRandomEmployeeDataSet.FindRandomEmployees[intCounter].LastName;
+
+                        TheFindServerEventLogForReportsByUserDataSet = TheEventLogClass.FindServerEventLogForReportsByUser(strLastName, datStartDate, datEndDate);
+
+                        intRecordsReturned = TheFindServerEventLogForReportsByUserDataSet.FindServerEventLogForReportsByUser.Rows.Count;
+
+                        if(intRecordsReturned > 0)
                         {
                             SendUserReport();
                         }

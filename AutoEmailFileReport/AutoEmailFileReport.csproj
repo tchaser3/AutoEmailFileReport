@@ -39,6 +39,9 @@
     <Reference Include="DateSearchDLL">
       <HintPath>..\..\Blue Jay Class Library\DateSearchDLL.dll</HintPath>
     </Reference>
+    <Reference Include="NewEmployeeDLL">
+      <HintPath>..\..\Blue Jay Class Library\NewEmployeeDLL.dll</HintPath>
+    </Reference>
     <Reference Include="NewEventLogDLL">
       <HintPath>..\..\Blue Jay Class Library\NewEventLogDLL.dll</HintPath>
     </Reference>
